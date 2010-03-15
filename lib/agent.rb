@@ -1,6 +1,4 @@
 class Agent
-  @@agents = {}
-  
   @@conditions = {}
   @@actions = {}
   @@conditions_all = nil
@@ -8,10 +6,6 @@ class Agent
   @@conditions_xor = nil
 
   attr_accessor :state
-  
-  def Agent.def_agent(name, agent)
-    @@agents[name] = agent
-  end
 
   def Agent.[](agent_name)
     @@agents[agent_name]
@@ -50,11 +44,4 @@ class Agent
       puts "OHOH!"
     end
   end
-end
-
-
-def def_agent(name, &block)
-  agent_class = Class.new(Agent)
-  block.call(agent_class)
-  Agent.def_agent(name, agent_class)
 end
