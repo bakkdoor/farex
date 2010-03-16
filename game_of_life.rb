@@ -1,7 +1,8 @@
-require "lib/agent.rb"
+require "lib/farex.rb"
 
-class GameOfLifeAgent < Agent
+class GameOfLifeBug < Bug
   states :bool => [:dead, :alive]
+  coordinates :x, :y
 
   condition :should_live do |env|
     env.count(&:alive?) == 3
@@ -11,18 +12,26 @@ class GameOfLifeAgent < Agent
     env.count(&:alive?) > 4 or env.count(&:dead?) < 2
   end
 
-  action :go_alive do |agent|
-    agent.alive!
+  action :go_alive do |bug|
+    bug.alive!
   end
 
-  action :go_dead do |agent|
-    agent.dead!
+  action :go_dead do |bug|
+    bug.dead!
   end
 
   conditions :all, {
     [:should_live] => :go_alive,
     [:should_die] => :go_dead
   }
+
+  on_creation do |grid, bug|
+    grid.position bug, :x => 10, :y => 20, :z => 30
+  end
+
+  # on_departure do |grid, bug|
+  #   # foo
+  # end
 
   # conditions :any, {
   #   # ... 
@@ -33,8 +42,11 @@ class GameOfLifeAgent < Agent
   # }
 end
 
-agent = GameOfLifeAgent.new
-agent.dead!
-puts agent.inspect
-agent.alive!
-puts agent.inspect
+bug = GameOfLifeBug.new
+bug.dead!
+puts bug.inspect
+bug.alive!
+puts bug.inspect
+
+grid = Grid.new(10, 10)
+grid.add_bug(GameOfLifeBug)
